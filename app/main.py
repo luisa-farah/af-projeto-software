@@ -6,6 +6,7 @@ from app.database import Base, engine, get_db
 from app.schemas.imoveis import ImovelCreate, ImovelResponse
 from app import imovel as crud
 from app.models.imovel import Imovel
+from app.auth import require_permission
 
 Base.metadata.create_all(bind=engine)
 
@@ -13,17 +14,17 @@ app = FastAPI(title="API de Imóveis")
 
 
 @app.get("/properties", response_model=List[ImovelResponse])
-def listar(db: Session = Depends(get_db)):
+def listar(db: Session = Depends(get_db), _=Depends(require_permission("read:properties"))):
     return crud.get_all(db)
 
 
 @app.post("/properties", response_model=ImovelResponse, status_code=201)
-def criar(data: ImovelCreate, db: Session = Depends(get_db)):
+def criar(data: ImovelCreate, db: Session = Depends(get_db), _=Depends(require_permission("write:properties"))):
     return crud.create(db, data)
 
 
 @app.delete("/properties/{imovel_id}", response_model=ImovelResponse)
-def deletar(imovel_id: int, db: Session = Depends(get_db)):
+def deletar(imovel_id: int, db: Session = Depends(get_db), _=Depends(require_permission("write:properties"))):
     imovel = crud.delete(db, imovel_id)
     if not imovel:
         raise HTTPException(status_code=404, detail="Imóvel não encontrado")
