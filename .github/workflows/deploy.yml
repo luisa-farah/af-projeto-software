@@ -33,10 +33,4 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/imoveis-api:latest
             docker stop imoveis-api || true
             docker rm imoveis-api || true
-            docker run -d \
-              --name imoveis-api \
-              --network rede \
-              -p 8000:8000 \
-              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-              --restart always \
-              ${{ secrets.DOCKERHUB_USERNAME }}/imoveis-api:latest
+            docker run -d --name imoveis-api --network rede -p 8000:8000 -e DATABASE_URL=${{ secrets.DATABASE_URL }} --restart always ${{ secrets.DOCKERHUB_USERNAME }}/imoveis-api:latest
