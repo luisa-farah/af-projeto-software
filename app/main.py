@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.database import Base, engine, get_db
-from app.schemas.imovel import ImovelCreate, ImovelResponse
+from app.schemas.imoveis import ImovelCreate, ImovelResponse
 from app import imovel as crud
 from app.models.imovel import Imovel
 
